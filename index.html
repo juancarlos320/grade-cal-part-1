@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css">
+    <title>Grade Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;      /* Center horizontally */
+            align-items: center;          /* Center vertically */
+            height: 100vh;                /* Full viewport height */
+            margin: 0;                    /* Remove default margin */
+            background: linear-gradient(135deg, #a8e6cf, #dcedc1); /* Soft green gradient */
+            font-family: 'Arial', sans-serif; /* Font style */
+        }
+        .container {
+            text-align: center;
+            background-color: white;      /* White background for the container */
+            padding: 40px;                /* Padding around the content */
+            border-radius: 20px;          /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Strong shadow effect */
+            transition: transform 0.3s ease; /* Transition for hover effect */
+        }
+        .container:hover {
+            transform: translateY(-5px);  /* Lift effect on hover */
+        }
+        h1 {
+            color: #388e3c;                /* Trendy green color for the heading */
+            margin-bottom: 20px;           /* Space below the heading */
+        }
+        input[type="text"] {
+            width: 280px;                  /* Set a fixed width for the input */
+            padding: 12px;                 /* Padding for a better touch target */
+            margin: 15px 0;                /* Spacing above and below */
+            border: none;                  /* Remove default border */
+            border-bottom: 2px solid #388e3c; /* Bottom border green */
+            border-radius: 5px;           /* Slightly rounded corners */
+            font-size: 16px;               /* Font size */
+            transition: border-color 0.3s; /* Transition for border color */
+        }
+        input[type="text"]:focus {
+            outline: none;                /* Remove default outline */
+            border-bottom: 2px solid #2e7d32; /* Darker green when focused */
+        }
+        button {
+            width: 300px;                /* Set a fixed width for the button */
+            padding: 12px;               /* Padding for a better touch target */
+            margin-top: 20px;            /* Space above the button */
+            border: none;                 /* Remove default border */
+            border-radius: 25px;         /* Oblong shape */
+            font-size: 18px;             /* Font size */
+            background-color: #388e3c;   /* Green button background */
+            color: white;                /* Button text color */
+            cursor: pointer;             /* Pointer cursor on hover */
+            transition: background-color 0.3s, transform 0.3s; /* Animation for button */
+        }
+        button:hover {
+            background-color: #2e7d32;   /* Darker shade on hover */
+            transform: translateY(-2px); /* Slight lift effect on hover */
+        }
+        #output {
+            margin-top: 20px;            /* Spacing above output */
+            font-size: 18px;              /* Font size for output */
+            color: #333;                  /* Dark color for text */
+            font-weight: bold;            /* Bold text */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Dela Peña Grade Calculator</h1>
+
+    <input type="text" id="prelim_grade" placeholder="Enter your Prelim Grade" required>
+    <button id="submit">Submit</button>
+    <div id="output"></div>
+</div>
+
+<script src="https://pyscript.net/latest/pyscript.js"></script>
+
+<py-script>
+def calculate_grades(prelim):
+    passing_grade = 75
+    max_midterm_final = 0.30 * 100 + 0.50 * 100
+    
+    if prelim >= passing_grade:
+        return "You have already passed the subject."
+    
+    required_overall_score = passing_grade - 0.20 * prelim
+    
+    if required_overall_score > max_midterm_final:
+        return "It is impossible to pass the subject with this Prelim grade."
+    
+    min_midterm_final = required_overall_score / 0.80
+    return f"Minimum Midterm and Final grades needed: {min_midterm_final:.2f}"
+
+def handle_submission(event):
+    prelim_grade_input = Element('prelim_grade').element.value  # Get the value of the input
+    output_element = Element('output')  # Access the output div
+    
+    try:
+        prelim_grade = float(prelim_grade_input)
+        if prelim_grade < 0 or prelim_grade > 100:
+            output_element.element.innerHTML = "Prelim grade must be between 0 and 100."
+        else:
+            result = calculate_grades(prelim_grade)
+            output_element.element.innerHTML = result
+    except ValueError:
+        output_element.element.innerHTML = "Please enter a valid number for Prelim grade."
+
+# Attach the event listener to the button
+Element('submit').element.onclick = handle_submission
+</py-script>
+
+</body>
+</html>
